@@ -109,6 +109,10 @@ public class BoardImplementation implements Board
 				y++;
 			}
 		}
+		else
+		{
+			throw new IllegalArgumentException();
+		}
 	}
 
 	@Override
@@ -240,7 +244,7 @@ public class BoardImplementation implements Board
 	@Override
 	public boolean canRemovePiece(Piece piece, int row, int column)
 	{
-		if(board[row][column] == null)
+		if(row < 0 || row >=  rows || column < 0 || column >= columns || board[row][column] == null)
 		{
 			return false;
 		}
