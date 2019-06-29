@@ -210,18 +210,18 @@ public class BoardImplementation implements Board
 				downIndex = rows - 1;
 			}
 			
-			System.out.println();
-			System.out.println("removePiece: PieceType: " + piece.getPieceType().toString());
-			System.out.println("removePiece: Piece Rotation: " + ((PieceImplementation)piece).getRotation());
-			System.out.println();
-			System.out.println("removePiece: pWidth: " + pWidth);
-			System.out.println("removePiece:  pHeight: " + pHeight);
-			System.out.println();
-			System.out.println("removePiece: leftIndex: " + leftIndex);
-			System.out.println("removePiece: rightIndex: " + rightIndex);
-			System.out.println("removePiece: upIndex: " + upIndex);
-			System.out.println("removePiece: downIndex: " + downIndex);
-			System.out.println();
+//			System.out.println();
+//			System.out.println("removePiece: PieceType: " + piece.getPieceType().toString());
+//			System.out.println("removePiece: Piece Rotation: " + ((PieceImplementation)piece).getRotation());
+//			System.out.println();
+//			System.out.println("removePiece: pWidth: " + pWidth);
+//			System.out.println("removePiece:  pHeight: " + pHeight);
+//			System.out.println();
+//			System.out.println("removePiece: leftIndex: " + leftIndex);
+//			System.out.println("removePiece: rightIndex: " + rightIndex);
+//			System.out.println("removePiece: upIndex: " + upIndex);
+//			System.out.println("removePiece: downIndex: " + downIndex);
+//			System.out.println();
 			
 			for(int i = upIndex; i <= downIndex; i++)
 			{

@@ -1,7 +1,6 @@
 package tetris.game;
 
 import java.util.ArrayList;
-import java.util.Random;
 import tetris.game.pieces.*;
 //import tetris.game.pieces.Piece;
 //import tetris.game.pieces.PieceFactory;
@@ -12,9 +11,6 @@ import tetris.game.pieces.*;
 public class TetrisGameImplementation implements TetrisGame
 {
 
-//	private Random random;
-//	private int rows;
-//	private int columns;
 	private Board board;
 	private PieceFactory pieceFactory;
 	private ArrayList<GameObserver> observerList;
@@ -31,9 +27,6 @@ public class TetrisGameImplementation implements TetrisGame
 	
 	public TetrisGameImplementation(Board pboard, PieceFactory ppiece)
 	{
-//		random = pr;
-//		rows = prows;
-//		columns = pcolumns;
 		board = pboard;
 		pieceFactory = ppiece;
 		observerList = new ArrayList<GameObserver>(10);
@@ -110,7 +103,7 @@ public class TetrisGameImplementation implements TetrisGame
 	@Override
 	public boolean moveDown()
 	{
-		System.out.println("Arrived in moveDown");
+		//System.out.println("Arrived in moveDown");
 		if(board.canRemovePiece(currentPiece, cpRow, cpColumn))
 		{
 			board.removePiece(currentPiece, cpRow, cpColumn);
@@ -124,7 +117,7 @@ public class TetrisGameImplementation implements TetrisGame
 			else
 			{
 				board.addPiece(currentPiece, cpRow, cpColumn);
-				observerList.forEach((o) -> o.pieceLanded());
+				//observerList.forEach((o) -> o.pieceLanded());
 				return false;
 			}
 		}
@@ -306,20 +299,21 @@ public class TetrisGameImplementation implements TetrisGame
 		{
 			if(currentPiece == null)
 			{
-				System.out.println("yes");
+				//System.out.println("yes");
 				newPiece();
 			}
 			else
 			{
-				System.out.println("hello");
+				//System.out.println("hello");
 				if(!moveDown())
 				{
-					System.out.println("darkness");
+					observerList.forEach((o) -> o.pieceLanded());
+					//System.out.println("darkness");
 					if(!newPiece())
 					{
-						System.out.println("my old friend");
+						//System.out.println("my old friend");
 						setGameOver();
-						((BoardImplementation)board).printStats();
+						//((BoardImplementation)board).printStats();
 					}
 				}
 			}

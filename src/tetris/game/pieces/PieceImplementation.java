@@ -341,7 +341,7 @@ public class PieceImplementation implements Piece {
 			}
 			case I:
 			{
-				System.out.println("Clockwise I");
+				//System.out.println("Clockwise I");
 				if(rotation == 0 || rotation == 2)
 				{
 					boolean[][] newBody = new boolean[1][4];
@@ -637,7 +637,7 @@ public class PieceImplementation implements Piece {
 			}
 			case I:
 			{
-				System.out.println("Counter Clockwise I");
+				//System.out.println("Counter Clockwise I");
 				if(rotation == 0 || rotation == 2)
 				{
 					boolean[][] newBody = new boolean[1][4];
@@ -742,7 +742,7 @@ public class PieceImplementation implements Piece {
 	@Override
 	public Point getRotationPoint()
 	{
-		System.out.println("Arrived in getRotationPoint");
+		//System.out.println("Arrived in getRotationPoint");
 		switch(type)
 		{
 			case L:

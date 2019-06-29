@@ -119,7 +119,7 @@ public class PieceFactoryImplementation implements PieceFactory
 		}
 		
 		randomNumber = randomNumber % 7;
-		System.out.println("Trying to generate piece with number " + randomNumber);
+		//System.out.println("Trying to generate piece with number " + randomNumber);
 		
 		switch(randomNumber)
 		{
