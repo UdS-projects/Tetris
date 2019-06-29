@@ -7,7 +7,8 @@ import tetris.game.pieces.Piece.PieceType;
  * The Board class represents the board where tetris can be played on. Pieces
  * can be added and removed from the board.
  */
-public interface Board {
+public interface Board
+{
 
 	/**
 	 * Returns the underlying board array.

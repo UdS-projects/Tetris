@@ -4,6 +4,7 @@ import java.util.Random;
 
 import tetris.autoplay.AutoPlayer;
 import tetris.game.pieces.PieceFactory;
+import tetris.game.pieces.PieceFactoryImplementation;
 
 public class MyTetrisFactory {
 
@@ -25,9 +26,14 @@ public class MyTetrisFactory {
 	 * @param r
 	 *            the random number generator to use for the PieceFactory.
 	 */
-	static public TetrisGame createTetrisGame(Random r) {
-		// TODO Complete implementation
-		throw new UnsupportedOperationException();
+	static public TetrisGame createTetrisGame(Random r)
+	{
+		Board board = createBoard(DEFAULT_ROWS, DEFAULT_COLUMNS);
+		PieceFactory pieceFactory = createPieceFactory(r);
+		//TetrisGame game = new TetrisGameImplementation(r, DEFAULT_ROWS, DEFAULT_COLUMNS, board, pieceFactory);
+		TetrisGame game = new TetrisGameImplementation(board, pieceFactory);
+	
+		return game;
 	}
 
 	/**
@@ -36,9 +42,9 @@ public class MyTetrisFactory {
 	 * @param r
 	 *            the random number generator to use for the PieceFactory.
 	 */
-	static public PieceFactory createPieceFactory(Random r) {
-		// TODO Complete implementation
-		throw new UnsupportedOperationException();
+	static public PieceFactory createPieceFactory(Random r)
+	{
+		return new PieceFactoryImplementation(r);
 	}
 
 	/**
@@ -49,9 +55,9 @@ public class MyTetrisFactory {
 	 * @param columns
 	 *            the number of columns
 	 */
-	static public Board createBoard(int rows, int columns) {
-		// TODO Complete implementation
-		throw new UnsupportedOperationException();
+	static public Board createBoard(int rows, int columns)
+	{
+		return new BoardImplementation(rows, columns);
 	}
 
 	/**
@@ -60,7 +66,17 @@ public class MyTetrisFactory {
 	 * @param game
 	 *            the game for which the AutoPlayer should provide moves
 	 */
-	static public AutoPlayer createAutoPlayer(TetrisGameView game) {
+	static public AutoPlayer createAutoPlayer(TetrisGameView game)
+	{
+//		if()
+//		{
+//			
+//		}
+//		else
+//		{
+//			
+//		}
+//		return null;
 		// TODO Complete implementation
 		throw new UnsupportedOperationException();
 	}
