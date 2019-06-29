@@ -246,6 +246,7 @@ public class TetrisGameImplementation implements TetrisGame
 			{
 				board.addPiece(newPiece, cpRow, cpColumn);
 				currentPiece = newPiece;
+				observerList.forEach((o) -> o.piecePositionChanged());
 				return true;
 			}
 			else
@@ -271,6 +272,7 @@ public class TetrisGameImplementation implements TetrisGame
 			{
 				board.addPiece(newPiece, cpRow, cpColumn);
 				currentPiece = newPiece;
+				observerList.forEach((o) -> o.piecePositionChanged());
 				return true;
 			}
 			else
