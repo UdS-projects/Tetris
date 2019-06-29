@@ -118,7 +118,7 @@ public class BoardImplementation implements Board
 	@Override
 	public boolean canAddPiece(Piece piece, int row, int column)
 	{
-		if(row < 0 || row >= rows || column < 0 || column >= columns)
+		if(piece == null || row < 0 || row >= rows || column < 0 || column >= columns)
 		{
 			return false;
 		}
@@ -244,7 +244,7 @@ public class BoardImplementation implements Board
 	@Override
 	public boolean canRemovePiece(Piece piece, int row, int column)
 	{
-		if(row < 0 || row >=  rows || column < 0 || column >= columns || board[row][column] == null)
+		if(piece == null || row < 0 || row >=  rows || column < 0 || column >= columns || board[row][column] == null)
 		{
 			return false;
 		}
