@@ -2,12 +2,11 @@ package tetris.game;
 
 import java.util.Random;
 
-import tetris.autoplay.AutoPlayer;
-import tetris.game.pieces.PieceFactory;
-import tetris.game.pieces.PieceFactoryImplementation;
+import tetris.autoplay.*;
+import tetris.game.pieces.*;
 
-public class MyTetrisFactory {
-
+public class MyTetrisFactory
+{
 	/**
 	 * The default number of rows.
 	 */
@@ -68,16 +67,6 @@ public class MyTetrisFactory {
 	 */
 	static public AutoPlayer createAutoPlayer(TetrisGameView game)
 	{
-//		if()
-//		{
-//			
-//		}
-//		else
-//		{
-//			
-//		}
-//		return null;
-		// TODO Complete implementation
-		throw new UnsupportedOperationException();
+		return new AutoPlayerImplementation(game);
 	}
 }

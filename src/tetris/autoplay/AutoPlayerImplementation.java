@@ -1,10 +1,15 @@
 package tetris.autoplay;
 
+import tetris.game.TetrisGameView;
+
 public class AutoPlayerImplementation implements AutoPlayer
 {
-	public AutoPlayerImplementation()
+	private TetrisGameView game;
+	
+	public AutoPlayerImplementation(TetrisGameView pGame)
 	{
-		// TODO Auto-generated constructor stub
+		game = pGame;
+		game.addObserver(this);
 	}
 
 	@Override
@@ -28,7 +33,7 @@ public class AutoPlayerImplementation implements AutoPlayer
 	@Override
 	public void gameOver()
 	{
-		// TODO Auto-generated method stub
+		game.removeObserver(this);
 	}
 
 	@Override
