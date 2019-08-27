@@ -1,293 +1,281 @@
 package tetris.autoplay;
 
 import tetris.game.TetrisGameView;
+import tetris.game.*;
 import tetris.game.pieces.*;
 import tetris.game.pieces.Piece.PieceType;
+import tetris.game.TetrisGameImplementation;
 
 public class AutoPlayerImplementation implements AutoPlayer
 {
 	private TetrisGameView game;
 	private Piece currentPiece;
 	private Piece nextPiece;
+	private Board board;
 	private PieceType[][] pieceTypeBoard;
-	private int column;
-	private int row;
 	private int rows;
-	private int columns = game.getBoardCopy().getNumberOfColumns();
+	private int columns;
+	
+	private int cpColumn;
+	private int cpRow;
+	private int bestRotation;
+	private int bestOffset;
+	private int lowestGaps;
+	private int lowestBoardHeight;
+	private int lowestPieceHeight;
+	
+	private boolean planComputed;
 	
 	public AutoPlayerImplementation(TetrisGameView pGame)
 	{
 		game = pGame;
 		game.addObserver(this);
-		currentPiece = game.getCurrentPieceCopy();
+		currentPiece = game.getCurrentPiece();
 		nextPiece = game.getNextPieceCopy();
-		column = game.getPieceColumn();
-		row = game.getPieceRow();
-		rows = game.getBoardCopy().getNumberOfRows();
-		pieceTypeBoard = new PieceType[rows][columns];
+		board = game.getBoardCopy();
+		pieceTypeBoard = board.getBoard();
+		rows = board.getNumberOfRows();
+		columns = board.getNumberOfColumns();
 		
-		for(int i = 0; i < rows; i++)
-		{
-			for(int j = 0; j < columns; j++)
-			{
-				pieceTypeBoard[i][j] = null;
-			}
-		}
+		cpColumn = game.getPieceColumn();
+		cpRow = game.getPieceRow();
+		lowestGaps = 99999;
+		lowestBoardHeight = 99999;
+		lowestPieceHeight = 99999;
+		
+		planComputed = false;
 	}
 
 	@Override
 	public void rowsCompleted()
 	{
-		int value = 0;
-	
-		for(int i = rows-1; i >= 0; i--)
-		{
-			for(int j = 0; j < columns; j++)
-			{
-				if(pieceTypeBoard[i][j] != null)
-				{
-					value++;
-				}
-			}
-			if(value == columns)
-			{
-				for(int j = 0; j < columns; j++)
-				{
-					if(pieceTypeBoard[i][j] != null)
-					{
-						pieceTypeBoard[i][j] = null;
-					}
-				}
-				for(int ii = i; ii >= 0; ii--)
-					{
-						for(int j = 0; j < columns; j++)
-						{
-							if(ii == 0)
-							{
-								pieceTypeBoard[ii][j] = null;
-							}
-							else
-							{
-								pieceTypeBoard[ii][j] = pieceTypeBoard[ii-1][j];
-							}
-						}
-					}
-			}
-			i++;
-		}
-		value = 0;
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
-	public void piecePositionChanged()
-	{
-		Point rotationPoint = currentPiece.getRotationPoint();
-		boolean[][] pb = currentPiece.getBody();
-		int pWidth = pb[0].length;
-		int pHeight = pb.length;
-		
-		int leftOffset = rotationPoint.getColumn();
-		int rightOffset = pWidth - leftOffset - 1;
-		int upOffset = rotationPoint.getRow();
-		int downOffset = pHeight - upOffset - 1;
-		
-		int leftIndex = column - leftOffset;
-		int rightIndex = column + rightOffset;
-		int upIndex = row - upOffset;
-		int downIndex = row + downOffset;
-		int x = 0;
-		int y = 0;
-		for(int i = upIndex; i <= downIndex; i++)
-		{
-			for(int j = leftIndex; j <= rightIndex; j++)
-			{
-				if(pb[y][x] == true)
-				{
-					pieceTypeBoard[i][j] = currentPiece.getPieceType();
-				}
-				x++;
-			}
-			x = 0;
-			y++;
-		}
+	public void piecePositionChanged() {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
-	public void pieceLanded()
-	{
-		
-		
-		Point rotationPoint = currentPiece.getRotationPoint();
-		boolean[][] pb = currentPiece.getBody();
-		int pWidth = pb[0].length;
-		int pHeight = pb.length;
-		
-		int leftOffset = rotationPoint.getColumn();
-		int rightOffset = pWidth - leftOffset - 1;
-		int upOffset = rotationPoint.getRow();
-		int downOffset = pHeight - upOffset - 1;
-		
-		int leftIndex = column - leftOffset;
-		int rightIndex = column + rightOffset;
-		int upIndex = row - upOffset;
-		int downIndex = row + downOffset;
-		int x = 0;
-		int y = 0;
-		for(int i = upIndex; i <= downIndex; i++)
-		{
-			for(int j = leftIndex; j <= rightIndex; j++)
-			{
-				if(pb[y][x] == true)
-				{
-					pieceTypeBoard[i][j] = currentPiece.getPieceType();
-				}
-				x++;
-			}
-			x = 0;
-			y++;
-		}
+	public void pieceLanded() {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
-	public void gameOver()
-	{
-		game.removeObserver(this);
+	public void gameOver() {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public Move getMove()
 	{
-		PieceType typeCurrentPiece = currentPiece.getPieceType();
-		int cpColumn = game.getPieceColumn();
-		int cpRow = game.getPieceRow();
-		switch(typeCurrentPiece)
+		if(!planComputed)
 		{
-			case I:
-				Point a = new Point(1,0);
-				Point b = new Point(2,0);
-
+			board = game.getBoardCopy();
+			pieceTypeBoard = board.getBoard();
+			currentPiece = game.getCurrentPiece();
+			nextPiece = game.getNextPieceCopy();
+			cpColumn = game.getPieceColumn();
+			cpRow = game.getPieceRow();
+			
+			computePlan();
+			planComputed = true;
+		}
+		//todo
+		return null;
+	}
+	
+	private int countGaps()
+	{
+		int gaps = 0;
+		for(int x = 0; x < columns; x++)
+		{
+			boolean foundBlock = false;
+			for(int y = 0; y < rows; y++)
+			{
+				if(pieceTypeBoard[y][x] != null)
+				{
+					foundBlock = true;
+				}
+				if(foundBlock && pieceTypeBoard[y][x] == null)
+				{
+					gaps++;
+				}
+			}
+		}
+		return gaps;
+	}
+	
+	private int countBoardHeight()
+	{
+		int height = 0;
+		for(int x = 0; x < columns; x++)
+		{
+			for(int y = 0; y < rows; y++)
+			{
+				if(pieceTypeBoard[y][x] != null)
+				{
+					height += rows - y;
+					break;
+				}
+			}
+		}
+		return height;
+	}
+	
+	private void computePlan()
+	{
+		for(int rotation = 0; rotation <= 3; rotation++)
+		{
+			//left and 0 offset
+			int offset = 0;
+			while(true)
+			{
+				//down
+				while(true)
+				{
+					if(board.canRemovePiece(currentPiece, cpRow, cpColumn))
+					{
+						board.removePiece(currentPiece, cpRow, cpColumn);
+						if(board.canAddPiece(currentPiece, cpRow+1, cpColumn))
+						{
+							board.addPiece(currentPiece, cpRow+1, cpColumn);
+							cpRow++;
+						}
+						else
+						{
+							board.addPiece(currentPiece, cpRow, cpColumn);
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
 				
-				if(currentPiece.getRotationPoint().equals(a) || currentPiece.getRotationPoint().equals(b))
+				
+				//score
+				int currentGaps = countGaps();
+				int currentBoardHeight = countBoardHeight();
+				if(currentGaps <= lowestGaps && currentBoardHeight <= lowestBoardHeight && cpRow <= lowestPieceHeight)
 				{
-					return Move.ROTATE_CW;
+					lowestGaps = currentGaps;
+					lowestBoardHeight = currentBoardHeight;
+					lowestPieceHeight = cpRow;
+					bestRotation = rotation;
+					bestOffset = offset;
 				}
-					if(pieceTypeBoard[cpRow][cpColumn] == null && pieceTypeBoard[cpRow+1][cpColumn] == null && pieceTypeBoard[cpRow+2][cpColumn] == null)
+				
+				
+				//reset piece height
+				board.removePiece(currentPiece, cpRow, cpColumn);
+				board.addPiece(currentPiece, 2, cpColumn);
+				cpRow = 2;
+				
+				
+				//move left
+				if(board.canRemovePiece(currentPiece, cpRow, cpColumn))
+				{
+					board.removePiece(currentPiece, cpRow, cpColumn);
+					if(board.canAddPiece(currentPiece, cpRow, cpColumn-1))
 					{
-						return Move.DOWN;
+						board.addPiece(currentPiece, cpRow, cpColumn-1);
+						cpColumn--;
+						offset--;
 					}
 					else
 					{
-						if(pieceTypeBoard[cpRow][cpColumn] == null && pieceTypeBoard[cpRow+1][cpColumn+1] == null && pieceTypeBoard[cpRow+2][cpColumn+2] == null)
-						{
-								return Move.LEFT;
-						}
-						else
-					{
-						return Move.RIGHT;
+						board.addPiece(currentPiece, cpRow, cpColumn);
+						break;
 					}
 				}
-			case J:
-				Point currentPoint = new Point(1,1);
-				if(!currentPoint.equals(currentPiece.getRotationPoint()))
+				else
 				{
-					return Move.ROTATE_CCW;
+					break;
 				}
-				else 
+			}
+			
+			
+			//reset piece
+			board.removePiece(currentPiece, cpRow, cpColumn);
+			board.addPiece(currentPiece, 2, columns/2);
+			cpRow = 2;
+			cpColumn = columns/2;
+			
+			
+			//right offset
+			offset = 0;
+			while(true)
+			{
+				//move right and down
+				if(board.canRemovePiece(currentPiece, cpRow, cpColumn))
 				{
-					if(pieceTypeBoard[cpRow][cpColumn] == null && pieceTypeBoard[cpRow+1][cpColumn] == null && pieceTypeBoard[cpRow+2][cpColumn] == null)
+					board.removePiece(currentPiece, cpRow, cpColumn);
+					if(board.canAddPiece(currentPiece, cpRow, cpColumn+1))
 					{
-						return Move.DOWN;
+						board.addPiece(currentPiece, cpRow, cpColumn+1);
+						cpColumn++;
+						offset++;
+						
+						//down
+						while(true)
+						{
+							if(board.canRemovePiece(currentPiece, cpRow, cpColumn))
+							{
+								board.removePiece(currentPiece, cpRow, cpColumn);
+								if(board.canAddPiece(currentPiece, cpRow+1, cpColumn))
+								{
+									board.addPiece(currentPiece, cpRow+1, cpColumn);
+									cpRow++;
+								}
+								else
+								{
+									board.addPiece(currentPiece, cpRow, cpColumn);
+									break;
+								}
+							}
+							else
+							{
+								break;
+							}
+						}
+						
+						
+						//score
+						int currentGaps = countGaps();
+						int currentBoardHeight = countBoardHeight();
+						if(currentGaps <= lowestGaps && currentBoardHeight <= lowestBoardHeight && cpRow <= lowestPieceHeight)
+						{
+							lowestGaps = currentGaps;
+							lowestBoardHeight = currentBoardHeight;
+							lowestPieceHeight = cpRow;
+							bestRotation = rotation;
+							bestOffset = offset;
+						}
+						
+						
+						//reset piece height
+						board.removePiece(currentPiece, cpRow, cpColumn);
+						board.addPiece(currentPiece, 2, cpColumn);
+						cpRow = 2;
 					}
 					else
 					{
-						if(pieceTypeBoard[cpRow][cpColumn] == null && pieceTypeBoard[cpRow+1][cpColumn+1] == null && pieceTypeBoard[cpRow+2][cpColumn+2] == null)
-						{
-								return Move.LEFT;
-						}
-						else
-						{
-						return Move.RIGHT;
-						}
+						board.addPiece(currentPiece, cpRow, cpColumn);
+						break;
 					}
 				}
-			case L:
-				Point currentPoint2 = new Point(1,0);
-				if(!currentPoint2.equals(currentPiece.getRotationPoint()))
+				else
 				{
-					return Move.ROTATE_CCW;
+					break;
 				}
-				else 
-				{
-					if(pieceTypeBoard[cpRow][cpColumn] == null && pieceTypeBoard[cpRow+1][cpColumn] == null && pieceTypeBoard[cpRow+2][cpColumn] == null)
-					{
-						return Move.DOWN;
-					}
-					else
-					{
-						if(pieceTypeBoard[cpRow][cpColumn] == null && pieceTypeBoard[cpRow+1][cpColumn+1] == null && pieceTypeBoard[cpRow+2][cpColumn+2] == null)
-						{
-								return Move.LEFT;
-						}
-						else
-						{
-						return Move.RIGHT;
-						}
-					}
-				}
-			case O:
-				return Move.DOWN;
-			case S:
-				Point currentPoint3 = new Point(0,1);
-				if(!currentPoint3.equals(currentPiece.getRotationPoint()))
-				{
-					return Move.ROTATE_CW;
-				}
-				else 
-				{
-					if(pieceTypeBoard[cpRow][cpColumn] == null && pieceTypeBoard[cpRow+1][cpColumn] == null && pieceTypeBoard[cpRow+2][cpColumn] == null)
-					{
-						return Move.DOWN;
-					}
-					else
-					{
-						if(pieceTypeBoard[cpRow][cpColumn] == null && pieceTypeBoard[cpRow+1][cpColumn+1] == null && pieceTypeBoard[cpRow+2][cpColumn+2] == null)
-						{
-								return Move.LEFT;
-						}
-						else
-						{
-						return Move.RIGHT;
-						}
-					}
-				}
-			case T:
-				Point currentPoint4 = new Point(1,1);
-				if(!currentPoint4.equals(currentPiece.getRotationPoint()) || currentPiece.getWidth() != 3)
-				{
-					return Move.ROTATE_CW;
-				}
-				else 
-				{
-					if(pieceTypeBoard[cpRow][cpColumn] == null && pieceTypeBoard[cpRow+1][cpColumn] == null && pieceTypeBoard[cpRow+2][cpColumn] == null)
-					{
-						return Move.DOWN;
-					}
-					else
-					{
-						if(pieceTypeBoard[cpRow][cpColumn] == null && pieceTypeBoard[cpRow+1][cpColumn+1] == null && pieceTypeBoard[cpRow+2][cpColumn+2] == null)
-						{
-								return Move.LEFT;
-						}
-						else
-						{
-						return Move.RIGHT;
-						}
-					}
-				}
-			case Z:
-				return Move.DOWN;
-			default:
-				return Move.DOWN; 
+			}
 		}
 	}
 }

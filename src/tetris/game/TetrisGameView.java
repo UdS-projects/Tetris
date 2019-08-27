@@ -31,6 +31,15 @@ public class TetrisGameView implements GameObservable {
 	public Piece getCurrentPieceCopy() {
 		return game.getCurrentPiece().clone();
 	}
+	
+	/**
+	 * Returns the current piece of the game.
+	 *
+	 * @return the current piece of the game
+	 */
+	public Piece getCurrentPiece() {
+		return game.getCurrentPiece();
+	}
 
 	/**
 	 * Returns a copy of the piece that comes next.
