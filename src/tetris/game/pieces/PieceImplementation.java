@@ -894,12 +894,12 @@ public class PieceImplementation implements Piece {
 	@Override
 	public Piece clone()
 	{
-		boolean newBody[][] = new boolean[getWidth()][getHeight()];
+		boolean newBody[][] = new boolean[getHeight()][getWidth()];
 		for(int i=0; i<getHeight(); i++)
 		{
 			for(int j=0; j<getWidth();j++)
 			{
-				newBody[j][i] = body[j][i];
+				newBody[i][j] = body[i][j];
 			}
 		}
 		
